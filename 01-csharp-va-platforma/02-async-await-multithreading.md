@@ -162,7 +162,7 @@ Klassik deadlock `SynchronizationContext` bor muhitda (WinForms, WPF, eski ASP.N
 sequenceDiagram
     participant UI as UI/Request thread (SyncContext)
     participant P as Thread pool
-    UI->>UI: var r = GetAsync().Result;  (bloklandi, kutmoqda)
+    UI->>UI: var r = GetAsync().Result (bloklandi, kutmoqda)
     Note over UI: GetAsync ichida: await http.GetAsync(...) [ConfigureAwait(true)]
     P-->>P: HTTP javob keldi, continuation tayyor
     P->>UI: SyncContext.Post(continuation) -> UI thread navbati

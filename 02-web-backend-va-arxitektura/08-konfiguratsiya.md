@@ -38,7 +38,7 @@ Yechim: konfiguratsiya tizimini provider'lar zanjiri sifatida tushunish, sirlarn
 ```mermaid
 flowchart LR
     A[Host: DOTNET_ va ASPNETCORE_ env, args] --> B[appsettings.json]
-    B --> C[appsettings.{Environment}.json]
+    B --> C["appsettings.{Environment}.json"]
     C --> D[User Secrets faqat Development]
     D --> E[Environment variables prefikssiz]
     E --> F[Command line args]

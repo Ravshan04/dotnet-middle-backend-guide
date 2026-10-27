@@ -44,7 +44,7 @@ sequenceDiagram
     participant S as Orders servis
     participant DB as PostgreSQL
     participant B as RabbitMQ
-    S->>DB: INSERT order; COMMIT
+    S->>DB: INSERT order, COMMIT
     S--xB: Publish(OrderSubmitted) (tarmoq xatosi)
     Note over S,B: Buyurtma bor, event yo'q. Teskari tartib ham xavfli:<br/>avval Publish, keyin COMMIT yiqilsa, event bor, buyurtma yo'q.
 ```
@@ -58,14 +58,14 @@ sequenceDiagram
     participant W as Outbox worker
     participant B as RabbitMQ
     participant C as Warehouse consumer
-    S->>DB: BEGIN; INSERT order; INSERT outbox_messages; COMMIT
+    S->>DB: BEGIN, INSERT order, INSERT outbox_messages, COMMIT
     loop har 1 s
         W->>DB: SELECT ... FROM outbox_messages WHERE sent_at IS NULL FOR UPDATE SKIP LOCKED
         W->>B: Publish (MessageId = outbox.id)
         W->>DB: UPDATE outbox_messages SET sent_at = now()
     end
     B->>C: Deliver (ehtimol ikki marta)
-    C->>DB: BEGIN; INSERT inbox(message_id) [dublikat bo'lsa: skip]; biznes; COMMIT
+    C->>DB: BEGIN, INSERT inbox(message_id) (dublikat bo'lsa skip), biznes, COMMIT
     C->>B: ack
 ```
 
